@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+    --color-text: #484E53;
+    --color-background: #f9f9f9;
+}
+
+:root.dark {
+    --color-text: #E1E1E1;
+    --color-background: #1A1A1A;
+    
+}
+
+.sun-icon {
+    @apply opacity-100 scale-100 rotate-0 dark:opacity-0 dark:scale-0 dark:rotate-90;
+  }
+  
+.moon-icon {
+    @apply opacity-0 scale-0 -rotate-90 dark:opacity-100 dark:scale-100 dark:rotate-0;
+}
+  
