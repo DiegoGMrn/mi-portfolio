@@ -1,8 +1,13 @@
 ---
 import "../styles/global.css";
 import '@fontsource-variable/onest';
+import '@fontsource/poppins/800.css';
+import '@fontsource/poppins/700.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/500.css';
 import Header from "../components/Header.astro";
-
+import Home from "../components/Home.astro";
+import Experience from "../components/Experience.astro";
 ---
 
 <!doctype html>
@@ -11,6 +16,7 @@ import Header from "../components/Header.astro";
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Portfolio</title>
 		<script>
@@ -26,6 +32,8 @@ import Header from "../components/Header.astro";
 	</head>
 	<body>
 		<Header />
+		<Home />
+		<Experience />
 		<slot />
 	</body>
 </html>
@@ -33,13 +41,14 @@ import Header from "../components/Header.astro";
 <style is:global>
 
 	html {
-		font-family: 'Onest Variable', system-ui, sans-serif;
+		font-family: 'Onest Variable', 'Poppins' ,system-ui, sans-serif;
 		color: var(--color-text);
 		background: var(--color-background);
 	}
 
 	body {
 		display: flex;
+		flex-direction: column;
 		justify-content: center;
 	}
 
