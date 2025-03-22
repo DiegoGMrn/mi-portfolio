@@ -2,15 +2,104 @@
 import ThemeIcon from "./ThemeIcon.astro"
 ---
 
-<header class="flex justify-between items-center py-3 w-[1120px]">
-  <img class="rounded-full w-12 h-12" src="/favicon.svg" alt="logo"/>
-  <nav class="flex flex-row gap-x-10">
-    <a href="/">Inicio</a>
-    <a href="/tecnology">Tecnologias</a>
-    <a href="/experience">Experiencia</a>
-    <a href="/projects">Proyectos</a>
-    <a href="/contact">Contacto</a>
+<header class="flex justify-between items-center py-3 px-5 w-full lg:px-20">
+  <img class="rounded-full w-12 h-12" src="/logo.jpg" alt="logo"/>
+
+  <!-- Contenedor para botones -->
+  <div class="flex items-center gap-4 lg:order-last">
+    <!-- Botón de menú -->
+    <button id="menuToggle" class="lg:hidden flex items-center justify-center w-10 h-10 relative">
+      <img id="menuIconDark" class="absolute w-8 h-8 transition-all duration-300 opacity-100" src="/menu_dark.svg" alt="menu" />
+      <img id="menuIconLight" class="absolute w-8 h-8 transition-all duration-300 opacity-0" src="/menu_light.svg" alt="menu" />
+
+    </button>
+    
+    <!-- Botón de cambio de tema -->
+    <ThemeIcon />
+  </div>
+
+  <!-- Menú de navegación con animación -->
+  <nav id="navMenu" 
+  class="absolute top-16 left-0 w-full bg-(--color-background) transition-all duration-300 opacity-0 scale-95 hidden lg:opacity-100 lg:scale-100 lg:static lg:w-auto lg:flex lg:flex-row lg:gap-x-10 lg:bg-transparent dark:lg:bg-transparent">
+    <ul class="flex flex-col items-center gap-y-4 py-4 lg:flex-row lg:gap-x-10 text-lg font-normal font-[Poppins_500]">
+      <li><a href="/" class="block px-4 py-2 ">Inicio</a></li>
+      <li><a href="/experience" class="block px-4 py-2">Experiencia</a></li>
+      <li><a href="/projects" class="block px-4 py-2">Proyectos</a></li>
+      <li><a href="/contact" class="block px-4 py-2">Contacto</a></li>
+    </ul>
   </nav>
-  <ThemeIcon />
 </header>
 
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const menuToggle = document.getElementById("menuToggle");
+    const navMenu = document.getElementById("navMenu");
+    const menuIconDark = document.getElementById("menuIconDark");
+    const menuIconLight = document.getElementById("menuIconLight");
+    const themeToggle = document.getElementById("themeToggle");
+
+    // Detectar el tema guardado y aplicar el ícono correcto al cargar la página
+    const isDarkMode = localStorage.getItem("theme") === "dark" || 
+                       (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+    if (isDarkMode) {
+      menuIconDark.classList.add("opacity-100");
+      menuIconDark.classList.remove("opacity-0");
+      menuIconLight.classList.add("opacity-0");
+      menuIconLight.classList.remove("opacity-100");
+      //document.documentElement.classList.add("dark"); // Asegúrate de aplicar la clase "dark"
+    } else {
+
+      menuIconDark.classList.add("opacity-0");
+      menuIconDark.classList.remove("opacity-100");
+      menuIconLight.classList.add("opacity-100");
+      menuIconLight.classList.remove("opacity-0");
+      //document.documentElement.classList.remove("dark");
+    }
+
+
+    // Evento para abrir/cerrar el menú
+    menuToggle.addEventListener("click", () => {
+    const isHidden = navMenu.classList.contains("hidden");
+
+    if (isHidden) {
+      navMenu.classList.remove("hidden");
+      setTimeout(() => {
+        navMenu.classList.remove("opacity-0", "scale-95");
+        navMenu.classList.add("opacity-100", "scale-100");
+      }, 10);
+    } else {
+      navMenu.classList.remove("opacity-100", "scale-100");
+      navMenu.classList.add("opacity-0", "scale-95");
+
+      // Espera a que termine la transición para ocultarlo completamente
+      setTimeout(() => {
+        navMenu.classList.add("hidden");
+      }, 300); // La duración debe coincidir con la de la transición CSS
+    }
+
+    menuIconDark.classList.toggle("rotate-90");
+    menuIconLight.classList.toggle("rotate-90");
+  });
+
+
+    
+    // Evento para cambiar el ícono del menú cuando cambia el tema
+     
+    themeToggle.addEventListener("click", () => {
+      const isDark = document.documentElement.classList.contains("dark");
+      if (isDark) {
+        menuIconDark.classList.add("opacity-100");
+        menuIconDark.classList.remove("opacity-0");
+        menuIconLight.classList.add("opacity-0");
+        menuIconLight.classList.remove("opacity-100");
+      } else {
+        menuIconDark.classList.add("opacity-0");
+        menuIconDark.classList.remove("opacity-100");
+        menuIconLight.classList.add("opacity-100");
+        menuIconLight.classList.remove("opacity-0");
+      }
+
+    });
+  });
+</script>
