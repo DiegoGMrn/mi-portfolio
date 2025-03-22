@@ -1,0 +1,27 @@
+---
+import { experienceData } from "../data/experienceData.js";
+---
+
+<section class="flex flex-col items-center justify-center mt-30">
+    <p class="text-4xl py-1 font-extrabold text-center font-[Poppins_800] bg-gradient-to-r from-(--color-accent) to-(--color-text-secondary) dark:to-white inline-block text-transparent bg-clip-text">Experiencia</p>
+    <div class="max-w-6xl w-full mx-auto">
+        <div class="space-y-6">
+            {experienceData.map((job) => (
+                <div class="p-5">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                        <h3 class="text-xl font-semibold font-[Poppins_600] text-(--color-text-secondary) dark:text-white">{job.title}</h3>
+                        <p class="text-(--color-text-secondary) font-medium font-[Poppins_500] mt-1 lg:mt-0">{job.period}</p>
+                    </div>
+                    <p class="mt-2 text-(--color-text-secondary) font-regular font-[Poppins_500]">
+                        {job.description}
+                    </p>
+                    <ul class="mt-1 list-disc list-inside text-(--color-text-secondary) font-regular font-[Poppins_500]">
+                        {job.achievements.map((achievement) => (
+                            <li>{achievement}</li>
+                        ))}
+                    </ul>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
