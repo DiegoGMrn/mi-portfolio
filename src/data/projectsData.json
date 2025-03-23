@@ -1,0 +1,56 @@
+{
+  "data": [
+    {
+      "categoria": "Desarrollo Web",
+      "proyectos": [
+        {
+          "id": 1,
+          "nombre": "Sistema de Gestión de Traslados Extrahospitalarios",
+          "descripcionCorta": "Plataforma web para gestionar traslados extrahospitalarios de pacientes.",
+          "descripcionLarga": "Aplicación web completa para la gestión de traslados extrahospitalarios de pacientes, permitiendo a los funcionarios hospitalarios registrar, monitorear y reportar traslados de manera eficiente, reduciendo significativamente la carga administrativa y el uso de papel.",
+          "imagen": "/projects/traslados-1.jpg",
+          "imagenes": [
+            "/projects/traslados-1.jpg",
+            "/projects/traslados-2.jpg",
+            "/projects/traslados-3.jpg",
+            "/projects/traslados-4.jpg",
+            "/projects/traslados-5.jpg",
+            "/projects/traslados-6.jpg"
+          ],
+          "video": "",
+          "tecnologias": [
+            "vuejs",
+            "nestjs",
+            "typescript",
+            "tailwindcss",
+            "microsoftsqlserver"
+          ],
+          "repositorio": ""
+        },
+        {
+          "id": 2,
+          "nombre": "Ecommerce con Microservicios",
+          "descripcionCorta": "Tienda en línea con arquitectura de microservicios.",
+          "descripcionLarga": "Ecommerce completo con arquitectura de microservicios, permitiendo a los usuarios comprar productos, gestionar su carrito de compras y realizar pagos de manera segura a traves de Transbank, mientras que los administradores pueden gestionar productos, pedidos y usuarios de manera eficiente.",
+          "imagen": "/projects/portfolio-1.png",
+          "imagenes": [
+            "/projects/portfolio-1.png",
+            "/projects/portfolio-2.png"
+          ],
+          "video": "",
+          "tecnologias": [
+            "nextjs",
+            "nestjs",
+            "typescript",
+            "go",
+            "tailwindcss",
+            "postgresql",
+            "rabbitmq",
+            "docker"
+          ],
+          "repositorio": "https://github.com/orgs/ecommerce-proyecto-integrador/repositories"
+        }
+      ]
+    }
+  ]
+}
