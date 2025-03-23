@@ -113,6 +113,13 @@ import ThemeIcon from "./ThemeIcon.astro"
       }
     });
 
+    // Marcar el enlace "Inicio" como activo por defecto
+    const homeLink = document.querySelector('.nav-link[href="#inicio"]');
+    if (homeLink) {
+      homeLink.classList.add("text-(--color-accent)");
+    }
+
+
     // Evento para navegar suavemente al hacer clic en los enlaces
     navLinks.forEach(link => {
       link.addEventListener("click", (e) => {
