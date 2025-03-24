@@ -230,7 +230,13 @@ import projectsDataJson from "../data/projectsData.json";
                 if(tech === "typescript") {
                     return `<i class="devicon-typescript-plain text-5xl content-center mx-2" title="javascript"></i>`;
                 }
-                const iconClass = tech === 'vuejs' || tech === "postgresql" || tech === "docker" || tech === "go" ? 'text-6xl content-center' : 'text-8xl';
+                if(tech === "express") {
+                    return `<i class="devicon-express-original-wordmark text-6xl content-center mx-2" title="express"></i>`;
+                }
+                if(tech === "javascript") {
+                    return `<i class="devicon-javascript-plain text-5xl content-center mx-2" title="javascript"></i>`;
+                }
+                const iconClass = tech === 'vuejs' || tech === "postgresql" || tech === "docker" || tech === "go" || tech === "microsoftsqlserver" ? 'text-6xl content-center' : 'text-8xl';
                 return `<i class="devicon-${tech}-plain-wordmark ${iconClass} mx-2" title="${tech}"></i>`;
             }).join('');
             
@@ -265,7 +271,7 @@ import projectsDataJson from "../data/projectsData.json";
                     </div>
                 </div>
                 
-                <div class="text-center mt-6">
+                <div class="flex flex-wrap justify-center gap-4 mt-6">
                     ${project.repositorio ? `
                         <a href="${project.repositorio}" target="_blank" class="inline-block px-6 py-3 bg-(--color-accent) text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors">
                             Ver Repositorio
@@ -275,6 +281,12 @@ import projectsDataJson from "../data/projectsData.json";
                             Repositorio privado
                         </span>
                     `}
+
+                    ${project.repositorio2 ? `
+                        <a href="${project.repositorio}" target="_blank" class="inline-block px-6 py-3 bg-(--color-accent) text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors">
+                            Ver Repositorio 2
+                        </a>
+                    ` : ''}
                 </div>
             `;
             

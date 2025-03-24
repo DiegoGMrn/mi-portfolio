@@ -29,13 +29,41 @@
         },
         {
           "id": 2,
+          "nombre": "Sistema de Gestión de Pagos de Proyectos",
+          "descripcionCorta": "Plataforma web para gestionar pagos de proyectos de construcción.",
+          "descripcionLarga": "Aplicación web completa para la gestión de pagos de proyectos de software, permitiendo a los usuarios realizar pagos y gestionar suscripciones de manera eficiente. Además, los administradores pueden acceder a un dashboard con información relevante sobre los pagos realizados.",
+          "imagen": "/projects/pagos-1.png",
+          "imagenes": [
+            "/projects/pagos-1.png",
+            "/projects/pagos-2.png",
+            "/projects/pagos-3.png",
+            "/projects/pagos-4.png",
+            "/projects/pagos-5.png",
+            "/projects/pagos-6.png",
+            "/projects/pagos-7.png",
+            "/projects/pagos-8.png",
+            "/projects/pagos-9.png"
+          ],
+          "video": "",
+          "tecnologias": [
+            "nextjs",
+            "nestjs",
+            "typescript",
+            "tailwindcss",
+            "postgresql"
+          ],
+          "repositorio": "https://github.com/Tenssan/payment-system-frontend",
+          "repositorio2": "https://github.com/sistema-de-pagos-UCN-PGTI/sistema-pagos-backend"
+
+        },
+        {
+          "id": 3,
           "nombre": "Ecommerce con Microservicios",
           "descripcionCorta": "Tienda en línea con arquitectura de microservicios.",
           "descripcionLarga": "Ecommerce completo con arquitectura de microservicios, permitiendo a los usuarios comprar productos, gestionar su carrito de compras y realizar pagos de manera segura a traves de Transbank, mientras que los administradores pueden gestionar productos, pedidos y usuarios de manera eficiente.",
-          "imagen": "/projects/portfolio-1.png",
+          "imagen": "/projects/tienda-1.jpg",
           "imagenes": [
-            "/projects/portfolio-1.png",
-            "/projects/portfolio-2.png"
+            "/projects/tienda-1.jpg"
           ],
           "video": "",
           "tecnologias": [
@@ -49,6 +77,27 @@
             "docker"
           ],
           "repositorio": "https://github.com/orgs/ecommerce-proyecto-integrador/repositories"
+        },
+        {
+          "id": 4,
+          "nombre": "Sistema de Gestión de Reportes Mineros",
+          "descripcionLarga": "Aplicación web completa para la gestión de reportes mineros sobre la producción de minerales, permitiendo la generación automatica de estos a traves archivos CSV.",
+          "descripcionCorta": "Plataforma web para gestionar reportes mineros.",
+          "imagen": "/projects/reportes-1.png",
+          "imagenes": [
+            "/projects/reportes-1.png"
+          ],
+          "video": "",
+          "tecnologias": [
+            "nextjs",
+            "express",
+            "javascript",
+            "tailwindcss",
+            "microsoftsqlserver",
+            "docker"
+          ],
+          "repositorio": "https://github.com/Tenssan/MiningDB-Frontend",
+          "repositorio2": "https://github.com/Rodaxx/MiningDB-Backend"
         }
       ]
     }
