@@ -134,6 +134,10 @@ import ThemeIcon from "./ThemeIcon.astro"
             navMenu.classList.add("hidden");
           }, 300);
         }
+
+        // Actualizar clases activas en los enlaces
+        navLinks.forEach(l => l.classList.remove("text-(--color-accent)"));
+        link.classList.add("text-(--color-accent)");
         
         // Obtener el ID del destino
         const targetId = link.getAttribute("href").substring(1);

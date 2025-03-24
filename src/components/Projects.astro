@@ -3,11 +3,11 @@ import projectsDataJson from "../data/projectsData.json";
 ---
 
 <section id="proyectos" class="flex flex-col items-center justify-center mt-30">
-    <p class="text-4xl py-1 font-extrabold text-center font-[Poppins_800] bg-gradient-to-r from-(--color-accent) to-(--color-text-secondary) dark:to-white inline-block text-transparent bg-clip-text">Proyectos</p>
+    <p class="text-4xl py-1 font-extrabold text-center font-[Poppins_800] bg-gradient-to-r from-(--color-accent) to-(--color-text-secondary) dark:to-white inline-block text-transparent bg-clip-text animate-fade-in">Proyectos</p>
     
-    <!-- Filtro de categorías -->
+    <!-- Filtro de categorías - Quitar animate-fade-in para hacerlo visible desde el inicio -->
     <div class="flex flex-wrap gap-4 justify-center mt-6 mb-8">
-        {projectsDataJson.data.map((categoria) => (
+        {projectsDataJson.data.map((categoria, index) => (
             <button 
                 class="category-btn px-4 py-2 rounded-lg bg-(--color-background-secondary) hover:bg-(--color-accent) hover:text-white text-(--color-text-secondary) transition-colors duration-300 font-medium"
                 data-categoria={categoria.categoria}
@@ -22,22 +22,21 @@ import projectsDataJson from "../data/projectsData.json";
         {projectsDataJson.data.map((categoria) => (
             <div class="categoria-container hidden" data-categoria={categoria.categoria}>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {categoria.proyectos.map((proyecto) => (
+                    {categoria.proyectos.map((proyecto, index) => (
                         <div 
-                            class="project-card bg-(--color-background-secondary) rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer transition-transform duration-300 hover:scale-105"
+                            class="project-card bg-(--color-background-secondary) rounded-xl overflow-hidden shadow-md hover:shadow-lg cursor-pointer "
                             data-proyecto-id={proyecto.id}
                         >
                             <div class="aspect-video overflow-hidden">
                                 <img 
                                     src={proyecto.imagen} 
                                     alt={proyecto.nombre} 
-                                    class="w-full h-full object-cover "
+                                    class="w-full h-full object-cover"
                                 />
                             </div>
                             <div class="p-5">
                                 <p class="text-sm text-(--color-text-secondary) dark:text-gray-300">Click aquí para más detalles</p>
                                 <h3 class="text-xl font-bold text-(--color-text-secondary) dark:text-white mb-2">{proyecto.nombre}</h3>
-                                
                             </div>
                         </div>
                     ))}
@@ -49,7 +48,7 @@ import projectsDataJson from "../data/projectsData.json";
     <!-- Popup / Modal para detalles del proyecto -->
     <div id="project-modal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden">
         <div class="bg-(--color-background) max-w-4xl w-full max-h-[90vh] overflow-y-auto rounded-xl p-6 relative">
-            <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 dark:hover:text-white">
+            <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 dark:hover:text-white z-10">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -62,37 +61,44 @@ import projectsDataJson from "../data/projectsData.json";
     </div>
 </section>
 
-<script define:vars={{ projectsDataJson }} >
-    // Cargar Swiper dinámicamente
-    function loadScript(src) {
-        return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = src;
-            script.onload = () => resolve();
-            script.onerror = () => reject(new Error(`Error al cargar ${src}`));
-            document.head.appendChild(script);
-        });
-    }
+<!-- Importar Swiper CSS y JS directamente en el componente para garantizar disponibilidad -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+<script is:inline src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
+<script define:vars={{ projectsDataJson }}>
     // Usar projectsDataJson pasado desde el componente
-    //const projectsDataJson = JSON.parse(document.currentScript.getAttribute('data-projects'));
     const projectsData = projectsDataJson.data;
     
     document.addEventListener("DOMContentLoaded", async () => {
-        // Cargar Swiper si no está disponible
-        if (typeof Swiper === 'undefined') {
-            try {
-                await loadScript('https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js');
-                console.log('Swiper cargado dinámicamente');
-            } catch (error) {
-                console.error('Error al cargar Swiper:', error);
-            }
-        }
+        console.log("Script de proyectos cargado");
         
-        // Manejo de botones de categoría
+        // Verificar que Swiper esté disponible
+        if (typeof Swiper === 'undefined') {
+            console.warn("Swiper no está disponible, cargando dinámicamente...");
+            await loadSwiper();
+        } else {
+            console.log("Swiper ya está disponible");
+        }
+
+        
+        // Activar la selección de categorías
         const categoryButtons = document.querySelectorAll(".category-btn");
+        const categoryContainers = document.querySelectorAll(".categoria-container");
+        
+        console.log("Botones de categoría encontrados:", categoryButtons.length);
+        console.log("Contenedores de categoría encontrados:", categoryContainers.length);
+        
+        // Asegurar que todos los contenedores estén ocultos al inicio
+        categoryContainers.forEach(container => {
+            container.classList.add("hidden");
+        });
+        
+        // Configurar los botones de categoría
         categoryButtons.forEach(button => {
             button.addEventListener("click", () => {
+                const categoria = button.dataset.categoria;
+                console.log("Categoría seleccionada:", categoria);
+                
                 // Actualizar estilo de botones
                 categoryButtons.forEach(btn => {
                     btn.classList.remove("bg-(--color-accent)", "text-white");
@@ -101,12 +107,9 @@ import projectsDataJson from "../data/projectsData.json";
                 button.classList.remove("bg-(--color-background-secondary)", "text-(--color-text-secondary)");
                 button.classList.add("bg-(--color-accent)", "text-white");
                 
-                // Mostrar proyectos de la categoría seleccionada
-                const selectedCategory = button.dataset.categoria;
-                const categoryContainers = document.querySelectorAll(".categoria-container");
-                
+                // Mostrar contenedor correspondiente
                 categoryContainers.forEach(container => {
-                    if (container.dataset.categoria === selectedCategory) {
+                    if (container.dataset.categoria === categoria) {
                         container.classList.remove("hidden");
                     } else {
                         container.classList.add("hidden");
@@ -115,52 +118,102 @@ import projectsDataJson from "../data/projectsData.json";
             });
         });
         
-        // Manejo de tarjetas de proyecto
+        // Seleccionar la primera categoría por defecto
+        if (categoryButtons.length > 0) {
+            setTimeout(() => {
+                categoryButtons[0].click();
+            }, 100);
+        }
+        
+        // Manejo de tarjetas de proyecto para el modal
         const projectCards = document.querySelectorAll(".project-card");
         const projectModal = document.getElementById("project-modal");
         const modalContent = document.getElementById("modal-content");
         const closeModal = document.getElementById("close-modal");
         
+        console.log("Tarjetas de proyecto encontradas:", projectCards.length);
+        
         projectCards.forEach(card => {
             card.addEventListener("click", () => {
                 const projectId = parseInt(card.dataset.proyectoId);
+                console.log("Proyecto seleccionado:", projectId);
                 const selectedProject = findProject(projectId);
                 
                 if (selectedProject) {
-                    renderProjectDetails(selectedProject);
-                    projectModal.classList.remove("hidden");
-                    document.body.style.overflow = "hidden"; // Prevenir scroll en el fondo
+                    // Mostrar modal con animación
+                    openModal();
+                    
+                    // Mostrar loader mientras se cargan las imágenes
+                    modalContent.innerHTML = `
+                        <div class="image-loader"></div>
+                        <h2 class="text-2xl font-bold text-(--color-text-secondary) dark:text-white mb-4">${selectedProject.nombre}</h2>
+                        <p class="text-(--color-text-secondary) dark:text-gray-300">Cargando...</p>
+                    `;
+                    
+                    // Precargar imágenes y luego renderizar el contenido completo
+                    preloadImages(selectedProject.imagenes).then(() => {
+                        renderProjectDetails(selectedProject);
+                    }).catch(error => {
+                        console.error("Error al cargar imágenes:", error);
+                        // Mostrar contenido incluso si falla la carga de algunas imágenes
+                        renderProjectDetails(selectedProject);
+                    });
                 }
             });
         });
-
-        // Seleccionar específicamente la categoría "Desarrollo Web"
-        const webDevCategory = document.querySelector(".category-btn[data-categoria='Desarrollo Web']");
         
-        // Si existe la categoría "Desarrollo Web", seleccionarla, si no, seleccionar la primera
-        if (webDevCategory) {
-            webDevCategory.click();
-        } else {
-            // Fallback: seleccionar la primera categoría si no se encuentra "Desarrollo Web"
-            const firstCategory = document.querySelector(".category-btn");
-            if (firstCategory) {
-                firstCategory.click();
-            }
+        // Función para abrir el modal con animación
+        function openModal() {
+            document.body.style.overflow = "hidden"; // Prevenir scroll en el fondo
+            projectModal.classList.remove("hidden");
+            
+            // Forzar reflow para asegurar que la transición funcione
+            void projectModal.offsetWidth;
+            
+            // Aplicar clase active para iniciar la animación
+            projectModal.classList.add("active");
+        }
+        
+        // Función para cerrar el modal con animación
+        function closeModalf() {
+            projectModal.classList.remove("active");
+            
+            // Esperar a que termine la animación antes de ocultar
+            setTimeout(() => {
+                projectModal.classList.add("hidden");
+                document.body.style.overflow = "auto";
+            }, 300);
+        }
+        
+        // Precargar imágenes para evitar cambios de tamaño
+        function preloadImages(imageUrls) {
+            const promises = imageUrls.map(url => {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.src = url;
+                    img.onload = resolve;
+                    img.onerror = reject;
+                });
+            });
+            
+            return Promise.all(promises);
         }
         
         // Cerrar modal
-        closeModal.addEventListener("click", () => {
-            projectModal.classList.add("hidden");
-            document.body.style.overflow = "auto";
-        });
+        if (closeModal) {
+            closeModal.addEventListener("click", () => {
+                closeModalf();
+            });
+        }
         
         // Cerrar modal al hacer clic fuera del contenido
-        projectModal.addEventListener("click", (e) => {
-            if (e.target === projectModal) {
-                projectModal.classList.add("hidden");
-                document.body.style.overflow = "auto";
-            }
-        });
+        if (projectModal) {
+            projectModal.addEventListener("click", (e) => {
+                if (e.target === projectModal) {
+                    closeModalf();
+                }
+            });
+        }
         
         // Función para encontrar un proyecto por ID
         function findProject(projectId) {
@@ -218,35 +271,211 @@ import projectsDataJson from "../data/projectsData.json";
                             Ver Repositorio
                         </a>
                     ` : `
-                        <a target="_blank" class="inline-block px-6 py-3 bg-(--color-accent) text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors">
+                        <span class="inline-block px-6 py-3 bg-(--color-accent) text-white rounded-lg font-medium">
                             Repositorio privado
-                        </a>
+                        </span>
                     `}
                 </div>
             `;
             
-           
             setTimeout(() => {
-                if (typeof Swiper !== 'undefined') {
-                    new Swiper('.swiper', {
-                        pagination: {
-                            el: '.swiper-pagination',
-                            clickable: true
-                        },
-                        loop: true,
-                        navigation: {
-                            nextEl: '.swiper-button-next',
-                            prevEl: '.swiper-button-prev',
-                        },
-                    });
+                initSwiper();
+            }, 300); 
+        }
+        // Función separada para inicializar Swiper, facilitando la depuración
+        function initSwiper() {
+            try {
+                console.log("Intentando inicializar Swiper...");
+                
+                // Comprobar que los elementos del Swiper existen
+                const swiperElement = document.querySelector('.swiper');
+                const swiperWrapper = document.querySelector('.swiper-wrapper');
+                const swiperSlides = document.querySelectorAll('.swiper-slide');
+                
+                console.log("Elementos del Swiper:", {
+                    swiperElement: !!swiperElement,
+                    swiperWrapper: !!swiperWrapper,
+                    swiperSlides: swiperSlides.length
+                });
+                
+                if (swiperElement && swiperWrapper && swiperSlides.length > 0) {
+                    if (typeof Swiper === 'function') {
+                        // Crear una nueva instancia de Swiper con opciones mejoradas
+                        const swiper = new Swiper('.swiper', {
+                            pagination: {
+                                el: '.swiper-pagination',
+                                clickable: true
+                            },
+                            loop: swiperSlides.length > 1, // Solo activar loop si hay más de una imagen
+                            navigation: {
+                                nextEl: '.swiper-button-next',
+                                prevEl: '.swiper-button-prev',
+                            },
+                            grabCursor: true,
+                            autoHeight: true,
+                            speed: 500,
+                            preloadImages: true,
+                            updateOnImagesReady: true
+                        });
+                        
+                        console.log("Swiper inicializado correctamente");
+                    } else {
+                        console.error("Swiper no es una función:", typeof Swiper);
+                    }
                 } else {
-                    console.error('Swiper no pudo ser cargado');
+                    console.error("No se encontraron todos los elementos necesarios para Swiper");
                 }
-            }, 100);
+            } catch (error) {
+                console.error("Error al inicializar Swiper:", error);
+            }
+        }
+        
+        // Función para cargar Swiper dinámicamente si no está disponible
+        async function loadSwiper() {
+            try {
+                // Cargar CSS
+                if (!document.querySelector('link[href*="swiper"]')) {
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = 'https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css';
+                    document.head.appendChild(link);
+                }
+                
+                // Cargar JS
+                return new Promise((resolve, reject) => {
+                    if (typeof Swiper !== 'undefined') {
+                        resolve();
+                        return;
+                    }
+                    
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js';
+                    script.onload = () => {
+                        console.log("Swiper cargado dinámicamente");
+                        resolve();
+                    };
+                    script.onerror = (error) => {
+                        console.error("Error al cargar Swiper dinámicamente:", error);
+                        reject(error);
+                    };
+                    document.body.appendChild(script);
+                });
+            } catch (error) {
+                console.error("Error en loadSwiper:", error);
+                throw error;
+            }
         }
     });
 </script>
 
-<script define:vars={{ projectsDataJson }} data-projects={JSON.stringify(projectsDataJson)}>
-    // Este script solo sirve para pasar los datos al script principal
-</script>
+<style>
+    .project-card {
+        transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+    }
+    
+    .project-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+</style>
+
+<style>
+    .project-card {
+        transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+    }
+    
+    .project-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Animaciones para el modal */
+    #project-modal {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    #project-modal.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    #project-modal .bg-\(\-\-color-background\) {
+        transform: scale(0.95);
+        opacity: 0;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    }
+    
+    #project-modal.active .bg-\(\-\-color-background\) {
+        transform: scale(1);
+        opacity: 1;
+    }
+    
+    /* Loader para las imágenes */
+    .image-loader {
+        position: relative;
+        background-color: var(--color-background-secondary);
+        border-radius: 0.5rem;
+        overflow: hidden;
+        min-height: 200px;
+    }
+    
+    .image-loader::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(
+            to right,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+        );
+        animation: shimmer 1.5s infinite;
+    }
+
+    /* Estilos adicionales para el Swiper */
+    .swiper {
+        width: 100%;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+    
+    .swiper-slide {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .swiper-slide img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+    
+    .swiper-pagination {
+        position: relative;
+        bottom: 0;
+        padding-top: 1rem;
+    }
+    
+    .swiper-button-next,
+    .swiper-button-prev {
+        color: var(--color-accent);
+    }
+    
+    /* Para prevenir flash de contenido sin estilos */
+    #project-modal:not(.active) .swiper {
+        visibility: hidden;
+    }
+    
+    @keyframes shimmer {
+        100% {
+            left: 100%;
+        }
+    }
+</style>

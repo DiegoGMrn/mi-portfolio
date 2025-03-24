@@ -21,18 +21,34 @@ import Footer from "../components/Footer.astro";
 		<link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Portfolio</title>
+		<title>Portafolio de Diego González</title>
 		<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-		<script>
-			if (
-			  localStorage.theme === 'dark' ||
-			  (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-			) {
-			  document.documentElement.classList.add('dark');
-			} else {
-			  document.documentElement.classList.remove('dark');
-			}
-		</script>
+		<!-- Prevenir flash de luz durante la carga -->
+        <script is:inline>
+            // Esta función se ejecuta inmediatamente durante la carga de la página
+            (function() {
+                // Establecer un color de fondo por defecto al HTML antes de que se cargue completamente
+                document.documentElement.style.backgroundColor = '#121212';
+                
+                // Leer la preferencia de tema y aplicarla inmediatamente
+                const isDarkMode = localStorage.getItem('theme') === 'dark' || 
+                    (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                
+                // Aplicar el tema apropiado
+                if (isDarkMode) {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.style.backgroundColor = '#121212';
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.style.backgroundColor = '#FAFAFA';
+                }
+                
+                // Cuando la página esté completamente cargada, eliminar el estilo inline
+                window.addEventListener('load', () => {
+                    document.documentElement.style.backgroundColor = '';
+                });
+            })();
+        </script>
 	</head>
 	<body>
 		<Header />
@@ -50,6 +66,7 @@ import Footer from "../components/Footer.astro";
 		font-family: 'Onest Variable', 'Poppins' ,system-ui, sans-serif;
 		color: var(--color-text);
 		background: var(--color-background);
+        transition: background-color 0.3s ease;
 	}
 
 	body {
@@ -58,4 +75,205 @@ import Footer from "../components/Footer.astro";
 		justify-content: center;
 	}
 
+	 /* Estado inicial (oculto) */
+	 .animate-fade-in:not(.visible),
+    .animate-slide-up:not(.visible),
+    .animate-slide-in:not(.visible),
+    .animate-pop-in:not(.visible),
+    .animate-scale-in:not(.visible),
+    .animate-icon:not(.visible) {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    /* Estado específico para cada tipo de animación cuando no es visible */
+    .animate-fade-in:not(.visible) {
+        transform: translateY(20px);
+    }
+
+    .animate-slide-up:not(.visible) {
+        transform: translateY(20px);
+    }
+
+    .animate-slide-in:not(.visible) {
+        transform: translateX(-20px);
+    }
+
+    .animate-pop-in:not(.visible) {
+        transform: scale(0.9);
+    }
+
+    .animate-scale-in:not(.visible) {
+        transform: scale(0.95);
+    }
+
+    .animate-icon:not(.visible) {
+        transform: translateY(20px);
+    }
+
+    /* Transiciones al hacerse visible */
+    .animate-fade-in.visible,
+    .animate-slide-up.visible,
+    .animate-slide-in.visible,
+    .animate-pop-in.visible,
+    .animate-scale-in.visible,
+    .animate-icon.visible {
+        opacity: 1;
+        pointer-events: auto;
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    /* Transformaciones específicas para cada tipo */
+    .animate-fade-in.visible,
+    .animate-slide-up.visible,
+    .animate-icon.visible {
+        transform: translateY(0);
+    }
+
+    .animate-slide-in.visible {
+        transform: translateX(0);
+    }
+
+    .animate-pop-in.visible {
+        transform: scale(1);
+        transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .animate-scale-in.visible {
+        transform: scale(1);
+    }
 </style>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        
+        // 1. Mostrar inmediatamente solo los elementos de la sección de inicio
+        const homeElements = document.querySelectorAll('#inicio .animate-fade-in, #inicio .animate-slide-up, #inicio .animate-icon');
+        homeElements.forEach(el => {
+            el.classList.add('visible');
+        });
+        
+        // 2. Configurar el IntersectionObserver con umbrales más estrictos
+        const observerOptions = {
+            root: null,
+            rootMargin: '-50px 0px', // Menos restrictivo para debugging
+            threshold: 0.1 // Menos restrictivo para debugging
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Solo aplicar la clase visible si no la tiene ya
+                    if (!entry.target.classList.contains('visible')) {
+                        // Retraso escalonado para elementos dentro de la misma sección
+                        const delayIndex = parseInt(entry.target.dataset.animationIndex || '0');
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, delayIndex * 100); // 100ms entre elementos
+                    }
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // 3. Aplicar a las secciones de experiencia y proyectos
+        
+        // Eliminar animaciones en experiencia
+        const experienceSection = document.getElementById('experiencia');
+        if (experienceSection) {
+            
+            // Título de experiencia
+            const titleElement = experienceSection.querySelector('.text-4xl');
+            if (titleElement) {
+                if (!titleElement.classList.contains('animate-fade-in')) {
+                    titleElement.classList.add('animate-fade-in');
+                }
+                titleElement.setAttribute('data-animation-index', '0');
+                observer.observe(titleElement);
+            }
+            
+            // Elementos de trabajo
+            const jobElements = experienceSection.querySelectorAll('.p-5');
+            jobElements.forEach((el, index) => {
+                if (!el.classList.contains('animate-slide-in')) {
+                    el.classList.add('animate-slide-in');
+                }
+                el.setAttribute('data-animation-index', (index + 1).toString());
+                observer.observe(el);
+            });
+        }
+        
+        // Configurar sección de proyectos
+        const projectsSection = document.getElementById('proyectos');
+        if (projectsSection) {
+            
+            // Título
+            const titleElement = projectsSection.querySelector('.text-4xl');
+            if (titleElement) {
+                if (!titleElement.classList.contains('animate-fade-in')) {
+                    titleElement.classList.add('animate-fade-in');
+                }
+                titleElement.setAttribute('data-animation-index', '0');
+                observer.observe(titleElement);
+            }
+            
+            // Botones de categoría
+            const categoryButtons = projectsSection.querySelectorAll('.category-btn');
+            categoryButtons.forEach((el, index) => {
+                if (!el.classList.contains('animate-pop-in')) {
+                    el.classList.add('animate-pop-in');
+                }
+                el.setAttribute('data-animation-index', (index + 1).toString());
+                observer.observe(el);
+            });
+            
+            // Tarjetas de proyectos
+            const projectCards = projectsSection.querySelectorAll('.project-card');
+            projectCards.forEach((el, index) => {
+                if (!el.classList.contains('animate-scale-in')) {
+                    el.classList.add('animate-scale-in');
+                }
+                el.setAttribute('data-animation-index', (index + 5).toString());
+            });
+        }
+        
+        // 4. Modificar el comportamiento de los botones de categoría
+        setTimeout(() => {
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            
+            // Modificar el comportamiento del click
+            categoryButtons.forEach(button => {
+                const originalClickHandler = button.onclick;
+                
+                button.onclick = function(e) {
+                    
+                    // Llamar al controlador original si existe
+                    if (originalClickHandler) {
+                        originalClickHandler.call(this, e);
+                    }
+                    
+                    // Obtener la categoría seleccionada
+                    const selectedCategory = this.dataset.categoria;
+                    
+                    // Obtener las tarjetas de la categoría seleccionada
+                    const container = document.querySelector(`.categoria-container[data-categoria="${selectedCategory}"]`);
+                    if (container) {
+                        const visibleCards = container.querySelectorAll('.project-card');
+                        
+                        // Observar cada tarjeta para animarla cuando sea visible
+                        visibleCards.forEach((card) => {
+                            if (!card.classList.contains('visible')) {
+                                observer.observe(card);
+                            }
+                        });
+                    }
+                };
+            });
+            
+            // Mostrar la primera categoría por defecto
+            const firstCategoryButton = document.querySelector('.category-btn');
+            if (firstCategoryButton) {
+                firstCategoryButton.click();
+            }
+        }, 500);
+    });
+</script>
