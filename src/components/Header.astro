@@ -58,6 +58,20 @@ import ThemeIcon from "./ThemeIcon.astro"
       menuIconLight.classList.remove("opacity-0");
     }
 
+    // Función para cerrar el menú móvil
+    function closeMenu() {
+      navMenu.classList.remove("opacity-100", "scale-100");
+      navMenu.classList.add("opacity-0", "scale-95");
+      
+      // Restablecer la rotación del ícono del menú
+      menuIconDark.classList.remove("rotate-90");
+      menuIconLight.classList.remove("rotate-90");
+      
+      // Espera a que termine la transición para ocultarlo completamente
+      setTimeout(() => {
+        navMenu.classList.add("hidden");
+      }, 300); // La duración debe coincidir con la de la transición CSS
+    }
 
     // Evento para abrir/cerrar el menú
     menuToggle.addEventListener("click", () => {
@@ -69,21 +83,13 @@ import ThemeIcon from "./ThemeIcon.astro"
           navMenu.classList.remove("opacity-0", "scale-95");
           navMenu.classList.add("opacity-100", "scale-100");
         }, 10);
+        menuIconDark.classList.add("rotate-90");
+        menuIconLight.classList.add("rotate-90");
       } else {
-        navMenu.classList.remove("opacity-100", "scale-100");
-        navMenu.classList.add("opacity-0", "scale-95");
-
-        // Espera a que termine la transición para ocultarlo completamente
-        setTimeout(() => {
-          navMenu.classList.add("hidden");
-        }, 300); // La duración debe coincidir con la de la transición CSS
+        closeMenu();
       }
-
-      menuIconDark.classList.toggle("rotate-90");
-      menuIconLight.classList.toggle("rotate-90");
     });
 
-    
     // Evento para cambiar el ícono del menú cuando cambia el tema
     themeToggle.addEventListener("click", () => {
       const isDark = document.documentElement.classList.contains("dark");
@@ -119,20 +125,14 @@ import ThemeIcon from "./ThemeIcon.astro"
       homeLink.classList.add("text-(--color-accent)");
     }
 
-
     // Evento para navegar suavemente al hacer clic en los enlaces
     navLinks.forEach(link => {
       link.addEventListener("click", (e) => {
         e.preventDefault();
         
-        // Cerrar el menú móvil si está abierto
+        // Cerrar el menú móvil si está abierto y en pantalla móvil
         if (window.innerWidth < 1024) {
-          navMenu.classList.remove("opacity-100", "scale-100");
-          navMenu.classList.add("opacity-0", "scale-95");
-          
-          setTimeout(() => {
-            navMenu.classList.add("hidden");
-          }, 300);
+          closeMenu(); // Usar la función reutilizable que también restablece el ícono
         }
 
         // Actualizar clases activas en los enlaces
