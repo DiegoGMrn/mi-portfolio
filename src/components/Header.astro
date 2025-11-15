@@ -7,11 +7,10 @@ import LanguageSelector from "./LanguageSelector.astro"
   
   <div></div>
 
+  <!-- Contenedor para botones -->
   <div class="flex items-center gap-4 lg:order-last">
-    <!-- Botón de cambio de idioma -->
-    <button id="langToggle" class="flex items-center justify-center w-10 h-10 relative" title="Change Language">
-      <span id="langText" class="text-lg font-semibold text-(--color-text-secondary) dark:text-white transition-all duration-300">ES</span>
-    </button>
+    <!-- Selector de idioma -->
+    <LanguageSelector />
     
     <!-- Botón de menú -->
     <button id="menuToggle" class="lg:hidden flex items-center justify-center w-10 h-10 relative">
@@ -19,8 +18,7 @@ import LanguageSelector from "./LanguageSelector.astro"
       <img id="menuIconLight" class="absolute w-8 h-8 transition-all duration-300 opacity-0" src="/menu_light.svg" alt="menu" />
     </button>
     
-    <LanguageSelector />
-    
+    <!-- Botón de cambio de tema -->
     <ThemeIcon />
   </div>
 
@@ -43,24 +41,8 @@ import LanguageSelector from "./LanguageSelector.astro"
     const menuIconDark = document.getElementById("menuIconDark");
     const menuIconLight = document.getElementById("menuIconLight");
     const themeToggle = document.getElementById("themeToggle");
-    const langToggle = document.getElementById("langToggle");
-    const langText = document.getElementById("langText");
     const navLinks = document.querySelectorAll(".nav-link");
     const header = document.querySelector("header");
-
-    // Detectar el idioma guardado y aplicar
-    const currentLang = localStorage.getItem("language") || "es";
-    langText.textContent = currentLang === "es" ? "ES" : "EN";
-    
-    // Evento para cambiar el idioma
-    langToggle.addEventListener("click", () => {
-      const newLang = currentLang === "es" ? "en" : "es";
-      localStorage.setItem("language", newLang);
-      langText.textContent = newLang === "es" ? "ES" : "EN";
-      
-      // Disparar evento personalizado para actualizar el CV
-      window.dispatchEvent(new CustomEvent("languageChanged", { detail: { language: newLang } }));
-    });
 
     // Detectar el tema guardado y aplicar el ícono correcto al cargar la página
     const isDarkMode = localStorage.getItem("theme") === "dark" || 
