@@ -1,0 +1,52 @@
+---
+---
+
+<button id="languageToggle" class="flex items-center justify-center w-10 h-10 relative">
+  <span id="langES" class="absolute transition-all duration-300 font-semibold text-lg opacity-100">ES</span>
+  <span id="langEN" class="absolute transition-all duration-300 font-semibold text-lg opacity-0">EN</span>
+</button>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const languageToggle = document.getElementById("languageToggle");
+    const langES = document.getElementById("langES");
+    const langEN = document.getElementById("langEN");
+
+    if (!languageToggle || !langES || !langEN) return;
+
+    const currentLang = localStorage.getItem("language") || "es";
+
+    if (currentLang === "en") {
+      langES.classList.add("opacity-0");
+      langES.classList.remove("opacity-100");
+      langEN.classList.add("opacity-100");
+      langEN.classList.remove("opacity-0");
+    } else {
+      langES.classList.add("opacity-100");
+      langES.classList.remove("opacity-0");
+      langEN.classList.add("opacity-0");
+      langEN.classList.remove("opacity-100");
+    }
+
+    languageToggle.addEventListener("click", () => {
+      const currentLang = localStorage.getItem("language") || "es";
+      const newLang = currentLang === "es" ? "en" : "es";
+      
+      localStorage.setItem("language", newLang);
+      
+      if (newLang === "en") {
+        langES.classList.add("opacity-0");
+        langES.classList.remove("opacity-100");
+        langEN.classList.add("opacity-100");
+        langEN.classList.remove("opacity-0");
+      } else {
+        langES.classList.add("opacity-100");
+        langES.classList.remove("opacity-0");
+        langEN.classList.add("opacity-0");
+        langEN.classList.remove("opacity-100");
+      }
+
+      window.dispatchEvent(new CustomEvent("languageChanged", { detail: { language: newLang } }));
+    });
+  });
+</script>

@@ -3,19 +3,19 @@ import { experienceData } from "../data/experienceData.js";
 ---
 
 <section id="experiencia" class="flex flex-col items-center justify-center mt-30">
-    <p class="text-4xl py-1 font-extrabold text-center font-[Poppins_800] bg-gradient-to-r from-(--color-accent) to-(--color-text-secondary) dark:to-white inline-block text-transparent bg-clip-text animate-fade-in">Experiencia</p>
+    <p class="text-4xl py-1 font-extrabold text-center font-[Poppins_800] bg-gradient-to-r from-(--color-accent) to-(--color-text-secondary) dark:to-white inline-block text-transparent bg-clip-text animate-fade-in" data-i18n="experience.title">Experiencia</p>
     <div class="max-w-6xl w-full mx-auto">
-        <div class="space-y-6">
-            {experienceData.map((job, index) => (
-                <div class="p-5 animate-slide-in">
+        <div id="experience-container" class="space-y-6">
+            {experienceData.es.map((job, index) => (
+                <div class="p-5 animate-slide-in experience-item" data-index={index}>
                     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-                        <h3 class="text-xl font-semibold font-[Poppins_600] text-(--color-text-secondary) dark:text-white">{job.title}</h3>
-                        <p class="text-(--color-text-secondary) font-medium font-[Poppins_500] mt-1 lg:mt-0">{job.period}</p>
+                        <h3 class="text-xl font-semibold font-[Poppins_600] text-(--color-text-secondary) dark:text-white job-title">{job.title}</h3>
+                        <p class="text-(--color-text-secondary) font-medium font-[Poppins_500] mt-1 lg:mt-0 job-period">{job.period}</p>
                     </div>
-                    <p class="mt-2 text-(--color-text-secondary) font-regular font-[Poppins_500]">
+                    <p class="mt-2 text-(--color-text-secondary) font-regular font-[Poppins_500] job-description">
                         {job.description}
                     </p>
-                    <ul class="mt-1 list-disc list-inside text-(--color-text-secondary) font-regular font-[Poppins_500]">
+                    <ul class="mt-1 list-disc list-inside text-(--color-text-secondary) font-regular font-[Poppins_500] job-achievements">
                         {job.achievements.map((achievement) => (
                             <li>{achievement}</li>
                         ))}
@@ -25,3 +25,45 @@ import { experienceData } from "../data/experienceData.js";
         </div>
     </div>
 </section>
+
+<script>
+    import { experienceData } from "../data/experienceData.js";
+
+    function updateExperience(lang: string) {
+        const experiences = experienceData[lang as keyof typeof experienceData];
+        const container = document.getElementById("experience-container");
+        
+        if (!container || !experiences) return;
+
+        const items = container.querySelectorAll(".experience-item");
+        
+        items.forEach((item, index) => {
+            const job = experiences[index];
+            if (!job) return;
+
+            const title = item.querySelector(".job-title");
+            const period = item.querySelector(".job-period");
+            const description = item.querySelector(".job-description");
+            const achievementsList = item.querySelector(".job-achievements");
+
+            if (title) title.textContent = job.title;
+            if (period) period.textContent = job.period;
+            if (description) description.textContent = job.description;
+            
+            if (achievementsList) {
+                achievementsList.innerHTML = job.achievements
+                    .map(achievement => `<li>${achievement}</li>`)
+                    .join('');
+            }
+        });
+    }
+
+    window.addEventListener("languageChanged", ((e: CustomEvent) => {
+        updateExperience(e.detail.language);
+    }) as EventListener);
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const currentLang = localStorage.getItem("language") || "es";
+        updateExperience(currentLang);
+    });
+</script>
