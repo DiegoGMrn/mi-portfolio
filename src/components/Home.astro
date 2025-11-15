@@ -27,11 +27,12 @@
             GitHub
         </a>
         
-        <a href="/Cv Diego González 2025.pdf" download class="flex items-center gap-2 bg-(--color-accent) text-white px-6 py-2 rounded-xl font-medium font-[Poppins_500] hover:bg-opacity-90 transition-all duration-300">
+        <!-- Descargar CV -->
+        <a id="cvDownloadBtn" href="/Cv Diego González 2025.pdf" download class="flex items-center gap-2 bg-(--color-accent) text-white px-6 py-2 rounded-xl font-medium font-[Poppins_500] hover:bg-opacity-90 transition-all duration-300">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            <span data-i18n="home.downloadCV">Descargar CV</span>
+            <span id="cvDownloadText">Descargar CV</span>
         </a>
     </div>
     
@@ -48,3 +49,30 @@
         </div>
     </div>
 </main>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const cvDownloadBtn = document.getElementById("cvDownloadBtn");
+    const cvDownloadText = document.getElementById("cvDownloadText");
+    
+    // Función para actualizar el botón de CV según el idioma
+    function updateCVButton(lang) {
+      if (lang === "en") {
+        cvDownloadBtn.href = "/Cv Diego Gonzalez 2025 English.pdf";
+        cvDownloadText.textContent = "Download CV";
+      } else {
+        cvDownloadBtn.href = "/Cv Diego González 2025.pdf";
+        cvDownloadText.textContent = "Descargar CV";
+      }
+    }
+    
+    // Establecer el idioma inicial
+    const currentLang = localStorage.getItem("language") || "es";
+    updateCVButton(currentLang);
+    
+    // Escuchar cambios de idioma
+    window.addEventListener("languageChanged", (event) => {
+      updateCVButton(event.detail.language);
+    });
+  });
+</script>

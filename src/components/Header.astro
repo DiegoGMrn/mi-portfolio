@@ -7,14 +7,18 @@ import LanguageSelector from "./LanguageSelector.astro"
   
   <div></div>
 
+  <!-- Contenedor para botones -->
   <div class="flex items-center gap-4 lg:order-last">
+    <!-- Selector de idioma -->
+    <LanguageSelector />
+    
+    <!-- Botón de menú -->
     <button id="menuToggle" class="lg:hidden flex items-center justify-center w-10 h-10 relative">
       <img id="menuIconDark" class="absolute w-8 h-8 transition-all duration-300 opacity-100" src="/menu_dark.svg" alt="menu" />
       <img id="menuIconLight" class="absolute w-8 h-8 transition-all duration-300 opacity-0" src="/menu_light.svg" alt="menu" />
     </button>
     
-    <LanguageSelector />
-    
+    <!-- Botón de cambio de tema -->
     <ThemeIcon />
   </div>
 
@@ -40,6 +44,7 @@ import LanguageSelector from "./LanguageSelector.astro"
     const navLinks = document.querySelectorAll(".nav-link");
     const header = document.querySelector("header");
 
+    // Detectar el tema guardado y aplicar el ícono correcto al cargar la página
     const isDarkMode = localStorage.getItem("theme") === "dark" || 
                        (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
 

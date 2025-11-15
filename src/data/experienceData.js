@@ -1,6 +1,16 @@
 export const experienceData = {
   es: [
     {
+      "title": "Software Engineer en Escuela de Ingeniería UCN Coquimbo",
+      "period": "Abril 2025 - Actualidad",
+      "description": "Responsable de mantener y mejorar el sistema de gestión de estudiantes de la Escuela de Ingeniería.",
+      "achievements": [
+        "Mantenimiento correctivo y evolutivo del sistema actual.",
+        "Mejora de la experiencia de usuario y usabilidad del sistema.",
+        "Implementación de nuevas funcionalidades basadas en requerimientos de los usuarios."
+      ]
+    },
+    {
       "title": "Tesista Desarrollador Full Stack en Hospital San Pablo de Coquimbo",
       "period": "Agosto 2024 - Diciembre 2024",
       "description": "Diseñé y desarrollé una plataforma para la gestión de traslados extrahospitalarios, utilizando Vue.js, Nest.js y SQL Server.",
@@ -21,6 +31,16 @@ export const experienceData = {
     }
   ],
   en: [
+    {
+      "title": "Software Engineer at Escuela de Ingeniería UCN Coquimbo",
+      "period": "April 2025 - Present",
+      "description": "Responsible for maintaining and enhancing the student management system of the School of Engineering.",
+      "achievements": [
+        "Corrective and evolutionary maintenance of the current system.",
+        "Improving the user experience and overall system usability.",
+        "Implementing new features based on user requirements."
+      ]
+    },
     {
       "title": "Thesis Student Full Stack Developer at Hospital San Pablo de Coquimbo",
       "period": "August 2024 - December 2024",
