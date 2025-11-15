@@ -1,35 +1,33 @@
 ---
 import ThemeIcon from "./ThemeIcon.astro"
+import LanguageSelector from "./LanguageSelector.astro"
 ---
 
 <header class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-3 px-5 w-full lg:px-20 bg-(--color-background) bg-opacity-95 backdrop-blur-sm shadow-sm transition-all duration-300">
   
   <div></div>
 
-  <!-- Contenedor para botones -->
   <div class="flex items-center gap-4 lg:order-last">
-    <!-- Botón de menú -->
     <button id="menuToggle" class="lg:hidden flex items-center justify-center w-10 h-10 relative">
       <img id="menuIconDark" class="absolute w-8 h-8 transition-all duration-300 opacity-100" src="/menu_dark.svg" alt="menu" />
       <img id="menuIconLight" class="absolute w-8 h-8 transition-all duration-300 opacity-0" src="/menu_light.svg" alt="menu" />
     </button>
     
-    <!-- Botón de cambio de tema -->
+    <LanguageSelector />
+    
     <ThemeIcon />
   </div>
 
-  <!-- Menú de navegación con animación -->
   <nav id="navMenu" 
   class="absolute top-16 left-0 w-full bg-(--color-background) transition-all duration-300 opacity-0 scale-95 hidden lg:opacity-100 lg:scale-100 lg:static lg:w-auto lg:flex lg:flex-row lg:gap-x-10 lg:bg-transparent dark:lg:bg-transparent">
     <ul class="flex flex-col items-center gap-y-4 py-4 lg:flex-row lg:gap-x-10 text-lg font-normal font-[Poppins_500]">
-      <li><a href="#inicio" class="block px-4 py-2 nav-link">Inicio</a></li>
-      <li><a href="#experiencia" class="block px-4 py-2 nav-link">Experiencia</a></li>
-      <li><a href="#proyectos" class="block px-4 py-2 nav-link">Proyectos</a></li>
+      <li><a href="#inicio" class="block px-4 py-2 nav-link" data-i18n="nav.home">Inicio</a></li>
+      <li><a href="#experiencia" class="block px-4 py-2 nav-link" data-i18n="nav.experience">Experiencia</a></li>
+      <li><a href="#proyectos" class="block px-4 py-2 nav-link" data-i18n="nav.projects">Proyectos</a></li>
     </ul>
   </nav>
 </header>
 
-<!-- Espaciador para compensar el navbar fijo -->
 <div class="h-16"></div>
 
 <script>
@@ -42,7 +40,6 @@ import ThemeIcon from "./ThemeIcon.astro"
     const navLinks = document.querySelectorAll(".nav-link");
     const header = document.querySelector("header");
 
-    // Detectar el tema guardado y aplicar el ícono correcto al cargar la página
     const isDarkMode = localStorage.getItem("theme") === "dark" || 
                        (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
 
@@ -58,22 +55,18 @@ import ThemeIcon from "./ThemeIcon.astro"
       menuIconLight.classList.remove("opacity-0");
     }
 
-    // Función para cerrar el menú móvil
     function closeMenu() {
       navMenu.classList.remove("opacity-100", "scale-100");
       navMenu.classList.add("opacity-0", "scale-95");
       
-      // Restablecer la rotación del ícono del menú
       menuIconDark.classList.remove("rotate-90");
       menuIconLight.classList.remove("rotate-90");
       
-      // Espera a que termine la transición para ocultarlo completamente
       setTimeout(() => {
         navMenu.classList.add("hidden");
-      }, 300); // La duración debe coincidir con la de la transición CSS
+      }, 300); 
     }
 
-    // Evento para abrir/cerrar el menú
     menuToggle.addEventListener("click", () => {
       const isHidden = navMenu.classList.contains("hidden");
 
@@ -90,7 +83,6 @@ import ThemeIcon from "./ThemeIcon.astro"
       }
     });
 
-    // Evento para cambiar el ícono del menú cuando cambia el tema
     themeToggle.addEventListener("click", () => {
       const isDark = document.documentElement.classList.contains("dark");
       if (isDark) {
@@ -106,7 +98,6 @@ import ThemeIcon from "./ThemeIcon.astro"
       }
     });
 
-    // Cambiar la apariencia del navbar al hacer scroll
     window.addEventListener("scroll", () => {
       if (window.scrollY > 10) {
         header.classList.add("shadow-md");
@@ -119,43 +110,36 @@ import ThemeIcon from "./ThemeIcon.astro"
       }
     });
 
-    // Marcar el enlace "Inicio" como activo por defecto
     const homeLink = document.querySelector('.nav-link[href="#inicio"]');
     if (homeLink) {
       homeLink.classList.add("text-(--color-accent)");
     }
 
-    // Evento para navegar suavemente al hacer clic en los enlaces
     navLinks.forEach(link => {
       link.addEventListener("click", (e) => {
         e.preventDefault();
         
-        // Cerrar el menú móvil si está abierto y en pantalla móvil
         if (window.innerWidth < 1024) {
-          closeMenu(); // Usar la función reutilizable que también restablece el ícono
+          closeMenu(); 
         }
 
-        // Actualizar clases activas en los enlaces
         navLinks.forEach(l => l.classList.remove("text-(--color-accent)"));
         link.classList.add("text-(--color-accent)");
         
-        // Obtener el ID del destino
         const targetId = link.getAttribute("href").substring(1);
         const targetElement = document.getElementById(targetId);
         
         if (targetElement) {
-          // Desplazamiento suave a la sección
           window.scrollTo({
-            top: targetElement.offsetTop - header.offsetHeight, // Offset dinámico basado en la altura del header
+            top: targetElement.offsetTop - header.offsetHeight, 
             behavior: "smooth"
           });
         }
       });
     });
 
-    // Detectar qué sección está visible durante el scroll
     window.addEventListener("scroll", () => {
-      const scrollPosition = window.scrollY + header.offsetHeight + 10; // Añadir offset
+      const scrollPosition = window.scrollY + header.offsetHeight + 10; 
       
       const sections = [
         document.getElementById("inicio"),
@@ -170,12 +154,10 @@ import ThemeIcon from "./ThemeIcon.astro"
         const sectionHeight = section.offsetHeight;
         
         if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-          // Quitar clase activa de todos los enlaces
           navLinks.forEach(link => {
             link.classList.remove("text-(--color-accent)");
           });
           
-          // Añadir clase activa al enlace correspondiente
           const activeLink = document.querySelector(`.nav-link[href="#${section.id}"]`);
           if (activeLink) {
             activeLink.classList.add("text-(--color-accent)");

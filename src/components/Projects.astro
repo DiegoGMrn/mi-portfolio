@@ -1,13 +1,13 @@
 ---
 import projectsDataJson from "../data/projectsData.json";
+import { translations } from "../data/translations.js";
 ---
 
 <section id="proyectos" class="flex flex-col items-center justify-center mt-30">
-    <p class="text-4xl py-1 font-extrabold text-center font-[Poppins_800] bg-gradient-to-r from-(--color-accent) to-(--color-text-secondary) dark:to-white inline-block text-transparent bg-clip-text animate-fade-in">Proyectos</p>
+    <p class="text-4xl py-1 font-extrabold text-center font-[Poppins_800] bg-gradient-to-r from-(--color-accent) to-(--color-text-secondary) dark:to-white inline-block text-transparent bg-clip-text animate-fade-in" data-i18n="projects.title">Proyectos</p>
     
-    <!-- Filtro de categorías - Quitar animate-fade-in para hacerlo visible desde el inicio -->
-    <div class="flex flex-wrap gap-4 justify-center mt-6 mb-8">
-        {projectsDataJson.data.map((categoria, index) => (
+    <div id="categories-container" class="flex flex-wrap gap-4 justify-center mt-6 mb-8">
+        {projectsDataJson.es.data.map((categoria) => (
             <button 
                 class="category-btn px-4 py-2 rounded-lg bg-(--color-background-secondary) hover:bg-(--color-accent) hover:text-white text-(--color-text-secondary) transition-colors duration-300 font-medium"
                 data-categoria={categoria.categoria}
@@ -17,14 +17,13 @@ import projectsDataJson from "../data/projectsData.json";
         ))}
     </div>
     
-    <!-- Contenedor de proyectos -->
-    <div class="w-full max-w-6xl mx-auto px-4">
-        {projectsDataJson.data.map((categoria) => (
+    <div id="projects-container" class="w-full max-w-6xl mx-auto px-4">
+        {projectsDataJson.es.data.map((categoria) => (
             <div class="categoria-container hidden" data-categoria={categoria.categoria}>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {categoria.proyectos.map((proyecto, index) => (
+                    {categoria.proyectos.map((proyecto) => (
                         <div 
-                            class="project-card bg-(--color-background-secondary) rounded-xl overflow-hidden shadow-md hover:shadow-lg cursor-pointer "
+                            class="project-card bg-(--color-background-secondary) rounded-xl overflow-hidden shadow-md hover:shadow-lg cursor-pointer"
                             data-proyecto-id={proyecto.id}
                         >
                             <div class="aspect-video overflow-hidden">
@@ -35,8 +34,8 @@ import projectsDataJson from "../data/projectsData.json";
                                 />
                             </div>
                             <div class="p-5">
-                                <p class="text-sm text-(--color-text-secondary) dark:text-gray-300">Click aquí para más detalles</p>
-                                <h3 class="text-xl font-bold text-(--color-text-secondary) dark:text-white mb-2">{proyecto.nombre}</h3>
+                                <p class="text-sm text-(--color-text-secondary) dark:text-gray-300 click-details" data-i18n="projects.clickForDetails">Click aquí para más detalles</p>
+                                <h3 class="text-xl font-bold text-(--color-text-secondary) dark:text-white mb-2 project-name">{proyecto.nombre}</h3>
                             </div>
                         </div>
                     ))}
@@ -45,7 +44,6 @@ import projectsDataJson from "../data/projectsData.json";
         ))}
     </div>
     
-    <!-- Popup / Modal para detalles del proyecto -->
     <div id="project-modal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden">
         <div class="bg-(--color-background) max-w-4xl w-full max-h-[90vh] overflow-y-auto rounded-xl p-6 relative">
             <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 dark:hover:text-white z-10">
@@ -55,51 +53,82 @@ import projectsDataJson from "../data/projectsData.json";
             </button>
             
             <div id="modal-content" class="mt-2">
-                <!-- Contenido dinámico del proyecto seleccionado -->
             </div>
         </div>
     </div>
 </section>
 
-<!-- Importar Swiper CSS y JS directamente en el componente para garantizar disponibilidad -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 <script is:inline src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
-<script define:vars={{ projectsDataJson }}>
-    // Usar projectsDataJson pasado desde el componente
-    const projectsData = projectsDataJson.data;
-    
-    document.addEventListener("DOMContentLoaded", async () => {
-        console.log("Script de proyectos cargado");
-        
-        // Verificar que Swiper esté disponible
-        if (typeof Swiper === 'undefined') {
-            console.warn("Swiper no está disponible, cargando dinámicamente...");
-            await loadSwiper();
-        } else {
-            console.log("Swiper ya está disponible");
-        }
+<script define:vars={{ projectsDataJson, translations }}>
+    let currentLang = localStorage.getItem("language") || "es";
+    let projectsData = projectsDataJson[currentLang].data;
 
+    function updateProjectsLanguage(lang) {
+        currentLang = lang;
+        projectsData = projectsDataJson[lang].data;
         
-        // Activar la selección de categorías
+        const categoriesContainer = document.getElementById("categories-container");
+        if (categoriesContainer) {
+            categoriesContainer.innerHTML = '';
+            projectsData.forEach((categoria) => {
+                const button = document.createElement('button');
+                button.className = 'category-btn px-4 py-2 rounded-lg bg-(--color-background-secondary) hover:bg-(--color-accent) hover:text-white text-(--color-text-secondary) transition-colors duration-300 font-medium';
+                button.setAttribute('data-categoria', categoria.categoria);
+                button.textContent = categoria.categoria;
+                categoriesContainer.appendChild(button);
+            });
+        }
+        
+        const projectsContainer = document.getElementById("projects-container");
+        if (projectsContainer) {
+            projectsContainer.innerHTML = '';
+            projectsData.forEach((categoria) => {
+                const container = document.createElement('div');
+                container.className = 'categoria-container hidden';
+                container.setAttribute('data-categoria', categoria.categoria);
+                
+                const grid = document.createElement('div');
+                grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
+                
+                categoria.proyectos.forEach((proyecto) => {
+                    const card = document.createElement('div');
+                    card.className = 'project-card bg-(--color-background-secondary) rounded-xl overflow-hidden shadow-md hover:shadow-lg cursor-pointer';
+                    card.setAttribute('data-proyecto-id', proyecto.id);
+                    
+                    const clickText = translations[lang].projects.clickForDetails;
+                    card.innerHTML = `
+                        <div class="aspect-video overflow-hidden">
+                            <img src="${proyecto.imagen}" alt="${proyecto.nombre}" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="p-5">
+                            <p class="text-sm text-(--color-text-secondary) dark:text-gray-300 click-details">${clickText}</p>
+                            <h3 class="text-xl font-bold text-(--color-text-secondary) dark:text-white mb-2 project-name">${proyecto.nombre}</h3>
+                        </div>
+                    `;
+                    
+                    grid.appendChild(card);
+                });
+                
+                container.appendChild(grid);
+                projectsContainer.appendChild(container);
+            });
+        }
+        
+        initializeProjectListeners();
+    }
+
+    function initializeProjectListeners() {
         const categoryButtons = document.querySelectorAll(".category-btn");
         const categoryContainers = document.querySelectorAll(".categoria-container");
         
-        console.log("Botones de categoría encontrados:", categoryButtons.length);
-        console.log("Contenedores de categoría encontrados:", categoryContainers.length);
+        categoryContainers.forEach(container => container.classList.add("hidden"));
         
-        // Asegurar que todos los contenedores estén ocultos al inicio
-        categoryContainers.forEach(container => {
-            container.classList.add("hidden");
-        });
-        
-        // Configurar los botones de categoría
         categoryButtons.forEach(button => {
             button.addEventListener("click", () => {
                 const categoria = button.dataset.categoria;
-                console.log("Categoría seleccionada:", categoria);
                 
-                // Actualizar estilo de botones
                 categoryButtons.forEach(btn => {
                     btn.classList.remove("bg-(--color-accent)", "text-white");
                     btn.classList.add("bg-(--color-background-secondary)", "text-(--color-text-secondary)");
@@ -107,7 +136,6 @@ import projectsDataJson from "../data/projectsData.json";
                 button.classList.remove("bg-(--color-background-secondary)", "text-(--color-text-secondary)");
                 button.classList.add("bg-(--color-accent)", "text-white");
                 
-                // Mostrar contenedor correspondiente
                 categoryContainers.forEach(container => {
                     if (container.dataset.categoria === categoria) {
                         container.classList.remove("hidden");
@@ -118,265 +146,164 @@ import projectsDataJson from "../data/projectsData.json";
             });
         });
         
-        // Seleccionar la primera categoría por defecto
         if (categoryButtons.length > 0) {
-            setTimeout(() => {
-                categoryButtons[0].click();
-            }, 100);
+            setTimeout(() => categoryButtons[0].click(), 100);
         }
         
-        // Manejo de tarjetas de proyecto para el modal
         const projectCards = document.querySelectorAll(".project-card");
-        const projectModal = document.getElementById("project-modal");
-        const modalContent = document.getElementById("modal-content");
-        const closeModal = document.getElementById("close-modal");
-        
-        console.log("Tarjetas de proyecto encontradas:", projectCards.length);
-        
         projectCards.forEach(card => {
             card.addEventListener("click", () => {
                 const projectId = parseInt(card.dataset.proyectoId);
-                console.log("Proyecto seleccionado:", projectId);
                 const selectedProject = findProject(projectId);
                 
                 if (selectedProject) {
-                    // Mostrar modal con animación
                     openModal();
+                    const modalContent = document.getElementById("modal-content");
+                    if (modalContent) {
+                        const loadingText = currentLang === 'es' ? 'Cargando...' : 'Loading...';
+                        modalContent.innerHTML = `
+                            <div class="image-loader"></div>
+                            <h2 class="text-2xl font-bold text-(--color-text-secondary) dark:text-white mb-4">${selectedProject.nombre}</h2>
+                            <p class="text-(--color-text-secondary) dark:text-gray-300">${loadingText}</p>
+                        `;
+                    }
                     
-                    // Mostrar loader mientras se cargan las imágenes
-                    modalContent.innerHTML = `
-                        <div class="image-loader"></div>
-                        <h2 class="text-2xl font-bold text-(--color-text-secondary) dark:text-white mb-4">${selectedProject.nombre}</h2>
-                        <p class="text-(--color-text-secondary) dark:text-gray-300">Cargando...</p>
-                    `;
-                    
-                    // Precargar imágenes y luego renderizar el contenido completo
                     preloadImages(selectedProject.imagenes).then(() => {
                         renderProjectDetails(selectedProject);
-                    }).catch(error => {
-                        console.error("Error al cargar imágenes:", error);
-                        // Mostrar contenido incluso si falla la carga de algunas imágenes
+                    }).catch(() => {
                         renderProjectDetails(selectedProject);
                     });
                 }
             });
         });
         
-        // Función para abrir el modal con animación
-        function openModal() {
-            document.body.style.overflow = "hidden"; // Prevenir scroll en el fondo
-            projectModal.classList.remove("hidden");
-            
-            // Forzar reflow para asegurar que la transición funcione
-            void projectModal.offsetWidth;
-            
-            // Aplicar clase active para iniciar la animación
-            projectModal.classList.add("active");
+        const closeModalBtn = document.getElementById("close-modal");
+        if (closeModalBtn) {
+            closeModalBtn.onclick = closeModalf;
         }
         
-        // Función para cerrar el modal con animación
-        function closeModalf() {
+        const projectModal = document.getElementById("project-modal");
+        if (projectModal) {
+            projectModal.onclick = (e) => {
+                if (e.target === projectModal) closeModalf();
+            };
+        }
+    }
+
+    function openModal() {
+        const projectModal = document.getElementById("project-modal");
+        if (projectModal) {
+            document.body.style.overflow = "hidden";
+            projectModal.classList.remove("hidden");
+            void projectModal.offsetWidth;
+            projectModal.classList.add("active");
+        }
+    }
+
+    function closeModalf() {
+        const projectModal = document.getElementById("project-modal");
+        if (projectModal) {
             projectModal.classList.remove("active");
-            
-            // Esperar a que termine la animación antes de ocultar
             setTimeout(() => {
                 projectModal.classList.add("hidden");
                 document.body.style.overflow = "auto";
             }, 300);
         }
-        
-        // Precargar imágenes para evitar cambios de tamaño
-        function preloadImages(imageUrls) {
-            const promises = imageUrls.map(url => {
-                return new Promise((resolve, reject) => {
-                    const img = new Image();
-                    img.src = url;
-                    img.onload = resolve;
-                    img.onerror = reject;
-                });
-            });
-            
-            return Promise.all(promises);
-        }
-        
-        // Cerrar modal
-        if (closeModal) {
-            closeModal.addEventListener("click", () => {
-                closeModalf();
-            });
-        }
-        
-        // Cerrar modal al hacer clic fuera del contenido
-        if (projectModal) {
-            projectModal.addEventListener("click", (e) => {
-                if (e.target === projectModal) {
-                    closeModalf();
-                }
-            });
-        }
-        
-        // Función para encontrar un proyecto por ID
-        function findProject(projectId) {
-            for (const category of projectsData) {
-                const project = category.proyectos.find(p => p.id === projectId);
-                if (project) return project;
-            }
-            return null;
-        }
-        
-        // Función para renderizar los detalles del proyecto en el modal
-        function renderProjectDetails(project) {
-            const tecnologiasIcons = project.tecnologias.map(tech => {
-                if(tech === "typescript") {
-                    return `<i class="devicon-typescript-plain text-5xl content-center mx-2" title="javascript"></i>`;
-                }
-                if(tech === "express") {
-                    return `<i class="devicon-express-original-wordmark text-6xl content-center mx-2" title="express"></i>`;
-                }
-                if(tech === "javascript") {
-                    return `<i class="devicon-javascript-plain text-5xl content-center mx-2" title="javascript"></i>`;
-                }
-                const iconClass = tech === 'vuejs' || tech === "postgresql" || tech === "docker" || tech === "go" || tech === "microsoftsqlserver" ? 'text-6xl content-center' : 'text-8xl';
-                return `<i class="devicon-${tech}-plain-wordmark ${iconClass} mx-2" title="${tech}"></i>`;
-            }).join('');
-            
-            // Galería de imágenes
-            const imageGallery = project.imagenes.map(img => 
-                `<div class="swiper-slide">
-                    <img src="${img}" alt="${project.nombre}" class="w-full h-auto rounded-lg">
-                </div>`
-            ).join('');
-            
-            modalContent.innerHTML = `
-                <h2 class="text-2xl font-bold text-(--color-text-secondary) dark:text-white mb-4">${project.nombre}</h2>
-                
-                <div class="swiper mb-6">
-                    <div class="swiper-wrapper">
-                        ${imageGallery}
-                    </div>
-                    <div class="swiper-pagination mt-3"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                </div>
-                
-                <div class="mb-6">
-                    <h3 class="text-xl font-semibold text-(--color-text-secondary) dark:text-white mb-2">Descripción</h3>
-                    <p class="text-(--color-text-secondary) dark:text-gray-300">${project.descripcionLarga}</p>
-                </div>
-                
-                <div class="mb-6">
-                    <h3 class="text-xl font-semibold text-(--color-text-secondary) dark:text-white mb-2">Tecnologías</h3>
-                    <div class="flex flex-wrap justify-start">
-                        ${tecnologiasIcons}
-                    </div>
-                </div>
-                
-                <div class="flex flex-wrap justify-center gap-4 mt-6">
-                    ${project.repositorio ? `
-                        <a href="${project.repositorio}" target="_blank" class="inline-block px-6 py-3 bg-(--color-accent) text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors">
-                            Ver Repositorio
-                        </a>
-                    ` : `
-                        <span class="inline-block px-6 py-3 bg-(--color-accent) text-white rounded-lg font-medium">
-                            Repositorio privado
-                        </span>
-                    `}
+    }
 
-                    ${project.repositorio2 ? `
-                        <a href="${project.repositorio}" target="_blank" class="inline-block px-6 py-3 bg-(--color-accent) text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors">
-                            Ver Repositorio 2
-                        </a>
-                    ` : ''}
-                </div>
-            `;
-            
-            setTimeout(() => {
-                initSwiper();
-            }, 300); 
+    function preloadImages(imageUrls) {
+        return Promise.all(imageUrls.map(url => 
+            new Promise((resolve, reject) => {
+                const img = new Image();
+                img.src = url;
+                img.onload = resolve;
+                img.onerror = reject;
+            })
+        ));
+    }
+
+    function findProject(projectId) {
+        for (const category of projectsData) {
+            const project = category.proyectos.find(p => p.id === projectId);
+            if (project) return project;
         }
-        // Función separada para inicializar Swiper, facilitando la depuración
-        function initSwiper() {
-            try {
-                console.log("Intentando inicializar Swiper...");
-                
-                // Comprobar que los elementos del Swiper existen
-                const swiperElement = document.querySelector('.swiper');
-                const swiperWrapper = document.querySelector('.swiper-wrapper');
-                const swiperSlides = document.querySelectorAll('.swiper-slide');
-                
-                console.log("Elementos del Swiper:", {
-                    swiperElement: !!swiperElement,
-                    swiperWrapper: !!swiperWrapper,
-                    swiperSlides: swiperSlides.length
-                });
-                
-                if (swiperElement && swiperWrapper && swiperSlides.length > 0) {
-                    if (typeof Swiper === 'function') {
-                        // Crear una nueva instancia de Swiper con opciones mejoradas
-                        const swiper = new Swiper('.swiper', {
-                            pagination: {
-                                el: '.swiper-pagination',
-                                clickable: true
-                            },
-                            loop: swiperSlides.length > 1, // Solo activar loop si hay más de una imagen
-                            navigation: {
-                                nextEl: '.swiper-button-next',
-                                prevEl: '.swiper-button-prev',
-                            },
-                            grabCursor: true,
-                            autoHeight: true,
-                            speed: 500,
-                            preloadImages: true,
-                            updateOnImagesReady: true
-                        });
-                        
-                        console.log("Swiper inicializado correctamente");
-                    } else {
-                        console.error("Swiper no es una función:", typeof Swiper);
-                    }
-                } else {
-                    console.error("No se encontraron todos los elementos necesarios para Swiper");
-                }
-            } catch (error) {
-                console.error("Error al inicializar Swiper:", error);
-            }
-        }
+        return null;
+    }
+
+    function renderProjectDetails(project) {
+        const modalContent = document.getElementById("modal-content");
+        if (!modalContent) return;
         
-        // Función para cargar Swiper dinámicamente si no está disponible
-        async function loadSwiper() {
-            try {
-                // Cargar CSS
-                if (!document.querySelector('link[href*="swiper"]')) {
-                    const link = document.createElement('link');
-                    link.rel = 'stylesheet';
-                    link.href = 'https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css';
-                    document.head.appendChild(link);
+        const tecnologiasIcons = project.tecnologias.map(tech => {
+            if(tech === "typescript") return `<i class="devicon-typescript-plain text-5xl content-center mx-2" title="typescript"></i>`;
+            if(tech === "express") return `<i class="devicon-express-original-wordmark text-6xl content-center mx-2" title="express"></i>`;
+            if(tech === "javascript") return `<i class="devicon-javascript-plain text-5xl content-center mx-2" title="javascript"></i>`;
+            const iconClass = ['vuejs', 'postgresql', 'docker', 'go', 'microsoftsqlserver'].includes(tech) ? 'text-6xl content-center' : 'text-8xl';
+            return `<i class="devicon-${tech}-plain-wordmark ${iconClass} mx-2" title="${tech}"></i>`;
+        }).join('');
+        
+        const imageGallery = project.imagenes.map(img => 
+            `<div class="swiper-slide"><img src="${img}" alt="${project.nombre}" class="w-full h-auto rounded-lg"></div>`
+        ).join('');
+        
+        const t = translations[currentLang].projects;
+        
+        modalContent.innerHTML = `
+            <h2 class="text-2xl font-bold text-(--color-text-secondary) dark:text-white mb-4">${project.nombre}</h2>
+            <div class="swiper mb-6">
+                <div class="swiper-wrapper">${imageGallery}</div>
+                <div class="swiper-pagination mt-3"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-(--color-text-secondary) dark:text-white mb-2">${currentLang === 'es' ? 'Descripción' : 'Description'}</h3>
+                <p class="text-(--color-text-secondary) dark:text-gray-300">${project.descripcionLarga}</p>
+            </div>
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-(--color-text-secondary) dark:text-white mb-2">${t.technologies}</h3>
+                <div class="flex flex-wrap justify-start">${tecnologiasIcons}</div>
+            </div>
+            <div class="flex flex-wrap justify-center gap-4 mt-6">
+                ${project.repositorio ? 
+                    `<a href="${project.repositorio}" target="_blank" class="inline-block px-6 py-3 bg-(--color-accent) text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors">${t.repository}</a>` :
+                    `<span class="inline-block px-6 py-3 bg-(--color-accent) text-white rounded-lg font-medium">${currentLang === 'es' ? 'Repositorio privado' : 'Private repository'}</span>`
                 }
-                
-                // Cargar JS
-                return new Promise((resolve, reject) => {
-                    if (typeof Swiper !== 'undefined') {
-                        resolve();
-                        return;
-                    }
-                    
-                    const script = document.createElement('script');
-                    script.src = 'https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js';
-                    script.onload = () => {
-                        console.log("Swiper cargado dinámicamente");
-                        resolve();
-                    };
-                    script.onerror = (error) => {
-                        console.error("Error al cargar Swiper dinámicamente:", error);
-                        reject(error);
-                    };
-                    document.body.appendChild(script);
+                ${project.repositorio2 ? 
+                    `<a href="${project.repositorio2}" target="_blank" class="inline-block px-6 py-3 bg-(--color-accent) text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors">${t.repository2}</a>` : 
+                    ''
+                }
+            </div>
+        `;
+        
+        setTimeout(initSwiper, 300);
+    }
+
+    function initSwiper() {
+        try {
+            const swiperElement = document.querySelector('.swiper');
+            const swiperSlides = document.querySelectorAll('.swiper-slide');
+            
+            if (swiperElement && swiperSlides.length > 0 && typeof Swiper === 'function') {
+                new Swiper('.swiper', {
+                    pagination: { el: '.swiper-pagination', clickable: true },
+                    loop: swiperSlides.length > 1,
+                    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                    grabCursor: true,
+                    autoHeight: true,
+                    speed: 500
                 });
-            } catch (error) {
-                console.error("Error en loadSwiper:", error);
-                throw error;
             }
+        } catch (error) {
+            console.error("Error al inicializar Swiper:", error);
         }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        window.addEventListener("languageChanged", (e) => {
+            updateProjectsLanguage(e.detail.language);
+        });
+        initializeProjectListeners();
     });
 </script>
 
@@ -387,21 +314,8 @@ import projectsDataJson from "../data/projectsData.json";
     
     .project-card:hover {
         transform: scale(1.05);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    }
-</style>
-
-<style>
-    .project-card {
-        transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
     }
     
-    .project-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    }
-    
-    /* Animaciones para el modal */
     #project-modal {
         opacity: 0;
         visibility: hidden;
@@ -424,7 +338,6 @@ import projectsDataJson from "../data/projectsData.json";
         opacity: 1;
     }
     
-    /* Loader para las imágenes */
     .image-loader {
         position: relative;
         background-color: var(--color-background-secondary);
@@ -440,54 +353,22 @@ import projectsDataJson from "../data/projectsData.json";
         left: -100%;
         width: 50%;
         height: 100%;
-        background: linear-gradient(
-            to right,
-            transparent,
-            rgba(255, 255, 255, 0.2),
-            transparent
-        );
+        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
         animation: shimmer 1.5s infinite;
     }
-
-    /* Estilos adicionales para el Swiper */
+    
+    @keyframes shimmer {
+        100% { left: 100%; }
+    }
+    
     .swiper {
         width: 100%;
         border-radius: 0.5rem;
         overflow: hidden;
-        margin-bottom: 1.5rem;
-    }
-    
-    .swiper-slide {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .swiper-slide img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-    }
-    
-    .swiper-pagination {
-        position: relative;
-        bottom: 0;
-        padding-top: 1rem;
     }
     
     .swiper-button-next,
     .swiper-button-prev {
         color: var(--color-accent);
-    }
-    
-    /* Para prevenir flash de contenido sin estilos */
-    #project-modal:not(.active) .swiper {
-        visibility: hidden;
-    }
-    
-    @keyframes shimmer {
-        100% {
-            left: 100%;
-        }
     }
 </style>

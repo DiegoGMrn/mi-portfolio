@@ -1,105 +1,210 @@
 {
-  "data": [
-    {
-      "categoria": "Desarrollo Web",
-      "proyectos": [
-        {
-          "id": 1,
-          "nombre": "Sistema de Gestión de Traslados Extrahospitalarios",
-          "descripcionCorta": "Plataforma web para gestionar traslados extrahospitalarios de pacientes.",
-          "descripcionLarga": "Aplicación web completa para la gestión de traslados extrahospitalarios de pacientes, permitiendo a los funcionarios hospitalarios registrar, monitorear y reportar traslados de manera eficiente, reduciendo significativamente la carga administrativa y el uso de papel.",
-          "imagen": "/projects/traslados-1.jpg",
-          "imagenes": [
-            "/projects/traslados-1.jpg",
-            "/projects/traslados-2.jpg",
-            "/projects/traslados-3.jpg",
-            "/projects/traslados-4.jpg",
-            "/projects/traslados-5.jpg",
-            "/projects/traslados-6.jpg"
-          ],
-          "video": "",
-          "tecnologias": [
-            "vuejs",
-            "nestjs",
-            "typescript",
-            "tailwindcss",
-            "microsoftsqlserver"
-          ],
-          "repositorio": ""
-        },
-        {
-          "id": 2,
-          "nombre": "Sistema de Gestión de Pagos de Proyectos",
-          "descripcionCorta": "Plataforma web para gestionar pagos de proyectos de construcción.",
-          "descripcionLarga": "Aplicación web completa para la gestión de pagos de proyectos de software, permitiendo a los usuarios realizar pagos y gestionar suscripciones de manera eficiente. Además, los administradores pueden acceder a un dashboard con información relevante sobre los pagos realizados.",
-          "imagen": "/projects/pagos-1.png",
-          "imagenes": [
-            "/projects/pagos-1.png",
-            "/projects/pagos-2.png",
-            "/projects/pagos-3.png",
-            "/projects/pagos-4.png",
-            "/projects/pagos-5.png",
-            "/projects/pagos-6.png",
-            "/projects/pagos-7.png",
-            "/projects/pagos-8.png",
-            "/projects/pagos-9.png"
-          ],
-          "video": "",
-          "tecnologias": [
-            "nextjs",
-            "nestjs",
-            "typescript",
-            "tailwindcss",
-            "postgresql"
-          ],
-          "repositorio": "https://github.com/Tenssan/payment-system-frontend",
-          "repositorio2": "https://github.com/sistema-de-pagos-UCN-PGTI/sistema-pagos-backend"
-
-        },
-        {
-          "id": 3,
-          "nombre": "Ecommerce con Microservicios",
-          "descripcionCorta": "Tienda en línea con arquitectura de microservicios.",
-          "descripcionLarga": "Ecommerce completo con arquitectura de microservicios, permitiendo a los usuarios comprar productos, gestionar su carrito de compras y realizar pagos de manera segura a traves de Transbank, mientras que los administradores pueden gestionar productos, pedidos y usuarios de manera eficiente.",
-          "imagen": "/projects/tienda-1.jpg",
-          "imagenes": [
-            "/projects/tienda-1.jpg"
-          ],
-          "video": "",
-          "tecnologias": [
-            "nextjs",
-            "nestjs",
-            "typescript",
-            "go",
-            "tailwindcss",
-            "postgresql",
-            "rabbitmq",
-            "docker"
-          ],
-          "repositorio": "https://github.com/orgs/ecommerce-proyecto-integrador/repositories"
-        },
-        {
-          "id": 4,
-          "nombre": "Sistema de Gestión de Reportes Mineros",
-          "descripcionLarga": "Aplicación web completa para la gestión de reportes mineros sobre la producción de minerales, permitiendo la generación automatica de estos a traves archivos CSV.",
-          "descripcionCorta": "Plataforma web para gestionar reportes mineros.",
-          "imagen": "/projects/reportes-1.png",
-          "imagenes": [
-            "/projects/reportes-1.png"
-          ],
-          "video": "",
-          "tecnologias": [
-            "nextjs",
-            "express",
-            "javascript",
-            "tailwindcss",
-            "microsoftsqlserver",
-            "docker"
-          ],
-          "repositorio": "https://github.com/Tenssan/MiningDB-Frontend",
-          "repositorio2": "https://github.com/Rodaxx/MiningDB-Backend"
-        }
-      ]
-    }
-  ]
+  "es": {
+    "data": [
+      {
+        "categoria": "Desarrollo Web",
+        "proyectos": [
+          {
+            "id": 1,
+            "nombre": "Sistema de Gestión de Traslados Extrahospitalarios",
+            "descripcionCorta": "Plataforma web para gestionar traslados extrahospitalarios de pacientes.",
+            "descripcionLarga": "Aplicación web completa para la gestión de traslados extrahospitalarios de pacientes, permitiendo a los funcionarios hospitalarios registrar, monitorear y reportar traslados de manera eficiente, reduciendo significativamente la carga administrativa y el uso de papel.",
+            "imagen": "/projects/traslados-1.jpg",
+            "imagenes": [
+              "/projects/traslados-1.jpg",
+              "/projects/traslados-2.jpg",
+              "/projects/traslados-3.jpg",
+              "/projects/traslados-4.jpg",
+              "/projects/traslados-5.jpg",
+              "/projects/traslados-6.jpg"
+            ],
+            "video": "",
+            "tecnologias": [
+              "vuejs",
+              "nestjs",
+              "typescript",
+              "tailwindcss",
+              "microsoftsqlserver"
+            ],
+            "repositorio": ""
+          },
+          {
+            "id": 2,
+            "nombre": "Sistema de Gestión de Pagos de Proyectos",
+            "descripcionCorta": "Plataforma web para gestionar pagos de proyectos de construcción.",
+            "descripcionLarga": "Aplicación web completa para la gestión de pagos de proyectos de software, permitiendo a los usuarios realizar pagos y gestionar suscripciones de manera eficiente. Además, los administradores pueden acceder a un dashboard con información relevante sobre los pagos realizados.",
+            "imagen": "/projects/pagos-1.png",
+            "imagenes": [
+              "/projects/pagos-1.png",
+              "/projects/pagos-2.png",
+              "/projects/pagos-3.png",
+              "/projects/pagos-4.png",
+              "/projects/pagos-5.png",
+              "/projects/pagos-6.png",
+              "/projects/pagos-7.png",
+              "/projects/pagos-8.png",
+              "/projects/pagos-9.png"
+            ],
+            "video": "",
+            "tecnologias": [
+              "nextjs",
+              "nestjs",
+              "typescript",
+              "tailwindcss",
+              "postgresql"
+            ],
+            "repositorio": "https://github.com/Tenssan/payment-system-frontend",
+            "repositorio2": "https://github.com/sistema-de-pagos-UCN-PGTI/sistema-pagos-backend"
+          },
+          {
+            "id": 3,
+            "nombre": "Ecommerce con Microservicios",
+            "descripcionCorta": "Tienda en línea con arquitectura de microservicios.",
+            "descripcionLarga": "Ecommerce completo con arquitectura de microservicios, permitiendo a los usuarios comprar productos, gestionar su carrito de compras y realizar pagos de manera segura a traves de Transbank, mientras que los administradores pueden gestionar productos, pedidos y usuarios de manera eficiente.",
+            "imagen": "/projects/tienda-1.jpg",
+            "imagenes": [
+              "/projects/tienda-1.jpg"
+            ],
+            "video": "",
+            "tecnologias": [
+              "nextjs",
+              "nestjs",
+              "typescript",
+              "go",
+              "tailwindcss",
+              "postgresql",
+              "rabbitmq",
+              "docker"
+            ],
+            "repositorio": "https://github.com/orgs/ecommerce-proyecto-integrador/repositories"
+          },
+          {
+            "id": 4,
+            "nombre": "Sistema de Gestión de Reportes Mineros",
+            "descripcionLarga": "Aplicación web completa para la gestión de reportes mineros sobre la producción de minerales, permitiendo la generación automatica de estos a traves archivos CSV.",
+            "descripcionCorta": "Plataforma web para gestionar reportes mineros.",
+            "imagen": "/projects/reportes-1.png",
+            "imagenes": [
+              "/projects/reportes-1.png"
+            ],
+            "video": "",
+            "tecnologias": [
+              "nextjs",
+              "express",
+              "javascript",
+              "tailwindcss",
+              "microsoftsqlserver",
+              "docker"
+            ],
+            "repositorio": "https://github.com/Tenssan/MiningDB-Frontend",
+            "repositorio2": "https://github.com/Rodaxx/MiningDB-Backend"
+          }
+        ]
+      }
+    ]
+  },
+  "en": {
+    "data": [
+      {
+        "categoria": "Web Development",
+        "proyectos": [
+          {
+            "id": 1,
+            "nombre": "Extrahospital Patient Transfer Management System",
+            "descripcionCorta": "Web platform to manage extrahospital patient transfers.",
+            "descripcionLarga": "Complete web application for managing extrahospital patient transfers, allowing hospital staff to register, monitor and report transfers efficiently, significantly reducing administrative burden and paper usage.",
+            "imagen": "/projects/traslados-1.jpg",
+            "imagenes": [
+              "/projects/traslados-1.jpg",
+              "/projects/traslados-2.jpg",
+              "/projects/traslados-3.jpg",
+              "/projects/traslados-4.jpg",
+              "/projects/traslados-5.jpg",
+              "/projects/traslados-6.jpg"
+            ],
+            "video": "",
+            "tecnologias": [
+              "vuejs",
+              "nestjs",
+              "typescript",
+              "tailwindcss",
+              "microsoftsqlserver"
+            ],
+            "repositorio": ""
+          },
+          {
+            "id": 2,
+            "nombre": "Project Payment Management System",
+            "descripcionCorta": "Web platform to manage construction project payments.",
+            "descripcionLarga": "Complete web application for managing software project payments, allowing users to make payments and manage subscriptions efficiently. Additionally, administrators can access a dashboard with relevant information about payments made.",
+            "imagen": "/projects/pagos-1.png",
+            "imagenes": [
+              "/projects/pagos-1.png",
+              "/projects/pagos-2.png",
+              "/projects/pagos-3.png",
+              "/projects/pagos-4.png",
+              "/projects/pagos-5.png",
+              "/projects/pagos-6.png",
+              "/projects/pagos-7.png",
+              "/projects/pagos-8.png",
+              "/projects/pagos-9.png"
+            ],
+            "video": "",
+            "tecnologias": [
+              "nextjs",
+              "nestjs",
+              "typescript",
+              "tailwindcss",
+              "postgresql"
+            ],
+            "repositorio": "https://github.com/Tenssan/payment-system-frontend",
+            "repositorio2": "https://github.com/sistema-de-pagos-UCN-PGTI/sistema-pagos-backend"
+          },
+          {
+            "id": 3,
+            "nombre": "Ecommerce with Microservices",
+            "descripcionCorta": "Online store with microservices architecture.",
+            "descripcionLarga": "Complete ecommerce with microservices architecture, allowing users to purchase products, manage their shopping cart and make secure payments through Transbank, while administrators can efficiently manage products, orders and users.",
+            "imagen": "/projects/tienda-1.jpg",
+            "imagenes": [
+              "/projects/tienda-1.jpg"
+            ],
+            "video": "",
+            "tecnologias": [
+              "nextjs",
+              "nestjs",
+              "typescript",
+              "go",
+              "tailwindcss",
+              "postgresql",
+              "rabbitmq",
+              "docker"
+            ],
+            "repositorio": "https://github.com/orgs/ecommerce-proyecto-integrador/repositories"
+          },
+          {
+            "id": 4,
+            "nombre": "Mining Reports Management System",
+            "descripcionLarga": "Complete web application for managing mining reports on mineral production, allowing automatic generation of these through CSV files.",
+            "descripcionCorta": "Web platform to manage mining reports.",
+            "imagen": "/projects/reportes-1.png",
+            "imagenes": [
+              "/projects/reportes-1.png"
+            ],
+            "video": "",
+            "tecnologias": [
+              "nextjs",
+              "express",
+              "javascript",
+              "tailwindcss",
+              "microsoftsqlserver",
+              "docker"
+            ],
+            "repositorio": "https://github.com/Tenssan/MiningDB-Frontend",
+            "repositorio2": "https://github.com/Rodaxx/MiningDB-Backend"
+          }
+        ]
+      }
+    ]
+  }
 }
