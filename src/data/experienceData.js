@@ -32,6 +32,16 @@ export const experienceData = {
   ],
   en: [
     {
+      "title": "Software Engineer at Escuela de Ingeniería UCN Coquimbo",
+      "period": "April 2025 - Present",
+      "description": "Responsible for maintaining and enhancing the student management system of the School of Engineering.",
+      "achievements": [
+        "Corrective and evolutionary maintenance of the current system.",
+        "Improving the user experience and overall system usability.",
+        "Implementing new features based on user requirements."
+      ]
+    },
+    {
       "title": "Thesis Student Full Stack Developer at Hospital San Pablo de Coquimbo",
       "period": "August 2024 - December 2024",
       "description": "Designed and developed a platform for managing extrahospital patient transfers, using Vue.js, Nest.js and SQL Server.",
